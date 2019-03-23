@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="main.js"></script>
+</head>
+<body onload="return addOptions();">
+
+<form onsubmit="return formSubmit();" id="myForm">
+  File Name:
+  <input type="text" name="name">
+  <br>
+  <textarea rows="40" cols="100" name="contents">Enter text here...</textarea>
+  <br>
+  <input type="submit">
+</form>
+
+<form onsubmit="return loadPaste();" id="myForm2">
+  <select name="cars" id="mySelect">
+  </select>
+  <br>
+  <input type="submit">
+</form>
+
+</body>
+</html>

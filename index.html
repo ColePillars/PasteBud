@@ -11,19 +11,22 @@
     <div class="container-fluid my-2">
       <div class="row justify-content-center">
         <div class="input-group mb-3 col-lg-8">
-          <input type="text" class="form-control" aria-label="Text input with segmented dropdown button" id="pasteTitle">
+          <input type="text" class="form-control" autocomplete="off" pattern="[a-zA-Z0-9_.-]{5,20}" aria-label="Text input with segmented dropdown button" id="pasteTitle">
           <div class="input-group-append">
             <button type="button submit" class="btn btn-outline-secondary" onclick="return savePaste();">Save</button>
             <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="sr-only">Toggle Dropdown</span>
             </button>
-            <div class="dropdown-menu" id="dropdown"></div>
+            <div class="dropdown-menu" id="dropdown">
+              <button class="dropdown-item" type="button" href="#" onclick="deletePaste();">Delete Paste</button>
+              <div class="dropdown-divider"></div>
+            </div>
           </div>
         </div>
       </div>
       <div class="row justify-content-center">
         <div class="input-group col-lg-8">
-          <textarea class="form-control" style="overflow:auto;resize:none" aria-label="With textarea" rows="25" id="pasteData"></textarea>
+          <textarea class="form-control" autocomplete="off" style="overflow:auto;resize:none" aria-label="With textarea" rows="25" id="pasteData"></textarea>
         </div>
       </div>
     </div>
@@ -32,5 +35,6 @@
     <script src="resource/jquery-3.3.1.slim.min.js"></script>
     <script src="resource/popper.min.js"></script>
     <script src="resource/bootstrap.min.js"></script>
+    <script src="resource/bootbox.min.js"></script>
   </body>
 </html>

@@ -1,28 +1,20 @@
 //Saves Paste
-function formSubmit() {
+function savePaste() {
   //Creates Cookie
   var fileName = document.getElementById("pasteTitle").value;
   var fileContents = document.getElementById("pasteData").value;
   var date = new Date();
   date.setTime(date.getTime()+(10*365*24*60*60*1000));
   document.cookie = fileName + "=" + fileContents + "; expires=" + date.toGMTString();
+
+  //Adds to Dropdown
   var doesntExist = true;
-  $("#dropdown a").on(fileName, function(index, value){
-    if ($(this).data('id') == value) { doesntExist = false; }
+  $("#dropdown a").each(function() {
+    var fileName = document.getElementById("pasteTitle").value;
+    if (this.text == fileName) { doesntExist = false; }
   });
   if (doesntExist) { $("#dropdown").append( '<a class="dropdown-item" href="#" onclick="return loadPaste(\'' + fileName + '\');">' + fileName + '</a>' ); }
   return false;
-
-  //Adds to Dropdown
-  // var x = document.getElementById("mySelect");
-  // var option = document.createElement("option");
-  // option.text = fileName;
-  // var doesntExist = true;
-  // for (i=0; i<x.options.length; i++) {
-  //   if (x.options[i].value == fileName) { doesntExist = false; }
-  // }
-  // if (doesntExist) { x.add(option); }
-  // return false;
 }
 
 //Loads previous paste file name and data

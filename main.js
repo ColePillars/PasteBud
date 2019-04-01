@@ -1,37 +1,74 @@
-//Saves Paste
+//Saves paste in cookie
 function savePaste() {
-  //Creates Cookie
   var fileName = document.getElementById("pasteTitle").value;
-  if (/^[a-zA-Z0-9_.-]{5,20}$/.test(fileName)) {
-    var fileContents = document.getElementById("pasteData").value;
-    var date = new Date();
-    date.setTime(date.getTime()+(10*365*24*60*60*1000));
-    document.cookie = fileName + "=" + fileContents + "; expires=" + date.toGMTString();
+  var fileContents = document.getElementById("pasteData").value;
 
-    //Adds to Dropdown
-    var doesntExist = true;
-    $("#dropdown a").each(function() {
-      var fileName = document.getElementById("pasteTitle").value;
-      if (this.text == fileName) { doesntExist = false; }
+  //Checks if paste exists
+  var doesntExist = true;
+  $("#dropdown a").each(function() {
+    var fileName = document.getElementById("pasteTitle").value;
+    if (this.text == fileName) { doesntExist = false; }
+  });
+
+  //Creates cookie if it doesnt exist
+  if (doesntExist) {
+    if (/^[a-zA-Z0-9_.-]{5,20}$/.test(fileName)) {
+      //Creates cookie
+      var date = new Date();
+      date.setTime(date.getTime()+(10*365*24*60*60*1000));
+      document.cookie = fileName + "=" + encodeURIComponent(fileContents) + "; expires=" + date.toGMTString();
+      //Adds to dropdown
+      if (doesntExist) { $("#dropdown").append( '<a class="dropdown-item" href="#" onclick="return loadPaste(\'' + fileName + '\');">' + fileName + '</a>' ); }
+    }
+    else {
+      bootbox.alert("Your paste title must be between 5 and 20 alphanumeric characters!");
+    }
+  }
+
+  //Checks to update if cookie exists and content is different
+  else if (accessCookie(fileName) != fileContents) {
+    bootbox.confirm({
+      message: "Are you sure you want save over this paste?",
+      callback: function(result){
+        if (result) {
+          //Updates cookie
+          var date = new Date();
+          date.setTime(date.getTime()+(10*365*24*60*60*1000));
+          document.cookie = fileName + "=" + encodeURIComponent(fileContents) + "; expires=" + date.toGMTString();
+        }
+      }
     });
-    if (doesntExist) { $("#dropdown").append( '<a class="dropdown-item" href="#" onclick="return loadPaste(\'' + fileName + '\');">' + fileName + '</a>' ); }
   }
+
+  //Alerts content is the same
   else {
-    bootbox.alert("Your paste title must be between 5 and 20 alphanumeric characters");
+    bootbox.alert("Nothing was changed! Change something before you save!");
   }
+
   return false;
 }
 
+//Deletes cookie of paste
 function deletePaste() {
-  bootbox.confirm({
-    message: "Are you sure you want to delete this paste? This cannot be undone",
-    callback: function(result){
-      if (result) { document.cookie = document.getElementById("pasteTitle").value + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT'; window.location.reload(); }
-    }
+  var doesntExist = true;
+  $("#dropdown a").each(function() {
+    var fileName = document.getElementById("pasteTitle").value;
+    if (this.text == fileName) { doesntExist = false; }
   });
+  if (doesntExist) {
+    bootbox.alert("This paste does not currently exist!");
+  }
+  else {
+    bootbox.confirm({
+      message: "Are you sure you want to delete this paste? This cannot be undone!",
+      callback: function(result){
+        if (result) { document.cookie = document.getElementById("pasteTitle").value + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT'; window.location.reload(); }
+      }
+    });
+  }
 }
 
-//Loads previous paste file name and data
+//Loads paste file name and data
 function loadPaste(pasteName) {
   var option = pasteName;
   var data = accessCookie(option);
@@ -47,7 +84,7 @@ function accessCookie(cookieName) {
   for (var i=0; i<allCookieArray.length; i++)
   {
     var temp = allCookieArray[i].trim();
-    if (temp.indexOf(name)==0) { return temp.substring(name.length,temp.length); }
+    if (temp.indexOf(name)==0) { return decodeURIComponent(temp.substring(name.length,temp.length)); }
   }
   return "";
 }

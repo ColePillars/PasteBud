@@ -1,0 +1,15 @@
+body {
+  overscroll-behavior: contain;
+}
+
+.form-control {
+  overflow:auto;
+  resize:none;
+  height:100%;
+}
+
+.dropdown-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}
